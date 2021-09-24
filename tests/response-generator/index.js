@@ -552,5 +552,19 @@ describe('Response Generator', () => {
 
 			sinon.assert.calledOnceWithExactly(faker.random.number, { max: 5 });
 		});
+
+		it('can handle newlines in the faker string', () => {
+			sinon.stub(faker.random, 'number').returns(1);
+			const responseSchema = {
+				type: 'integer',
+				'x-faker': 'random.number({\n"max": 5\n})'
+			};
+
+			const response = ResponseGenerator.generate(responseSchema);
+
+			assert.strictEqual(response, 1);
+
+			sinon.assert.calledOnceWithExactly(faker.random.number, { max: 5 });
+		});
 	});
 });
